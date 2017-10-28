@@ -1,0 +1,96 @@
+I added a fourth subnet (hidden) to the topology, making a chain.  It learns
+via post-compensatory learning. 
+
+Note that learning doesn't decrease over time in the 3 non-input nets.
+
+Check BICA
+
+The neurons are 550,1000,1000,150.  The S,H, and O each have 10 internal connections.
+B->S 20 ;S->H 10 ;H->S 2; H->O 10; O->H 10 intra-net connections. SB S=2,H=3,0=10.  
+This gets around 55 on the train test setup, with light output firing. 
+
+SB of H=4 increases output firing in test. 
+
+If I train for 40,000 instead of 20,000, then both SOM and Hidden overfire during
+training, and there is little firing during testing leading to 25/75.
+I played around with a range of SB weightings and either got overfire or underfire.
+
+
+So, I'm trying netwise global inhibition on Hidden and SOM (in addition to
+that on output).
+
+Ok, the situation is that I've got a reasonably solid mechanism to build
+a categorisation matrix.  That is the three net architecture works well on 
+a relatively wide range of inputs.  The four net architecture is not as
+good, but also reasonably solid.  It is, however, limited.  
+
+Modifications in a range of ways lead to, essentially, base line behaviour.
+This happens through no firing in the output net.  This happens from too
+much firing in the intermediate nets.  This reduces the synaptic weights
+to the outputs.  If I move the SBs around, I get no firing or too much
+in the intermediate nets.  If I increase the training length from 20000 to
+40000, I get too much firing.  If I put netwise global inhibition, while I
+suppress too much firing, I lose the weights to the output net.   
+
+So what happens when the extra neurons fire?  What happens when they are
+prevented from firing by netwise global inhibition?  Does it have something to do
+with the neurons that don't fire during the Pearson tests?
+
+Just exploring the longer runs, there seems to be an important crossing point around
+a training length of 27500.  The number of neurons not firing in the SOM during
+testing gradually decreases.  The number of neurons firing in a cycle increases
+relatively slowly.  In the SOM it then goes from a maximum of about 200 at cycle
+26000 to 400 at cycle 27800.
+
+Note that correct categorization via Pearson of the SOM continues to be high beyond
+this point.  However, categorization via firing in the output net goes to chance
+by 29000.
+
+What happens during this change?  Almost all of the SOM neurons go from firing during 
+testing at 27500, to not always firing at 32000.  There's still a pretty good
+firing categorization at 27500.
+
+Bug!  There was a problem with updating incoming synaptic strength.  It only
+worked within the subnet.  I fixed this, and things seem to work a bit better.
+Note that the old rule seemed to work until the last of the SOM neurons were 
+saturated;  look at oldUpdateIncomingStrengths in iris3CANT.  Also note that
+this was (almost certainly) the algorithm used in the BICA paper.
+
+Ok, I still seem to have the same problem.  The problem is that the whole
+mechanism only works until the som neurons (and probably the hidden neurons if
+they went first) start to fire on their own.  That is, the combination of
+post and pre learning work up to the point that the intermediate neurons start
+to persist.  I've been testing with SB=5,4,4,10 and this gets better up until
+around cycle 24500, when the intermediate neurons start to fire.  
+
+Note there is some bug where the incomingStrength doesn't seem to print out 
+right.  It's often zero.  I can't figure out why, if in fact it is 0, or if
+the actual incoming synaptic strength is 0.
+
+So, I think wev'e hit a bit of a dead end with the pre-compensatory post-compensatory
+rule pair.  What seems to happen is that the post-compensatory bit spreads strength
+to new neurons until they all get some.  At this crossing point, and up to this point, 
+things are good because 1. the SOM neurons reflect the actual patterns quite well, and 
+2. the later (Output and in the 4 subnet case Hidden) subnets are associated with these
+neurons so that the firing behaviours roughly match.  The SOM neurons reflect the
+actual patterns as evident from Pearson (and later firing); this match continues for quite
+some time beyond the crossing point, but does wear away.  
+
+After the crossing point, I think that the we start to get persistent firing in
+the non-input nets.  These associations then start to replace the relevant 
+input-output associations.  I think it would be good to show this in the paper.
+I can show the change in synaptic weights between nets.  These all go up, except 
+the output->output weights.  However, the weights from O->H and I->S go up very 
+little.  I can also show persistent firing by looking at the firing behaviour
+beyond (say) cycle 45.  
+
+Note that I'm assuming that the same thing happens if there is global inhibition 
+on the internal subnets.  When the inhibition starts to kick in, that is the 
+crossing point.    It's close but not exactly the case.  It starts to go down
+after the crossing point, but only quite gradually.  By 40000 it's still at 64/35.
+My explanation is that after the crossing point, the learning is mostly within
+the internal nets.  The effect of the input is less, and is washed out a bit by
+the continuing internal net changes.
+
+
+
