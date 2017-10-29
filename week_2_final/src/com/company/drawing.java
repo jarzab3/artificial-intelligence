@@ -10,63 +10,78 @@ import javafx.scene.shape.*;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.Pane;
 
+import java.util.concurrent.ThreadLocalRandom;
 
 public class drawing extends Application {
 
-    public int[][] arr0;
-    public int[][] arr1;
-    public double[] centerLine;
+    public drawing() {
 
-
-    public drawing(){
-        this.arr0 = Main.arr0;
-        this.arr1 = Main.arr1;
-        this.centerLine = Main.centerLine;
     }
 
     Pane panel = new Pane();
 
-    int width = 600;
-    int height = 600;
+    int width = Main.width;
+    int height = Main.height;
+
+    //This a linear equation
+    static double f(double x) {
+
+        return 0.3 * x + 0.2;
+    }
 
     @Override // Override the start method in the Application class
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws InterruptedException {
 
         Scene scene1 = new Scene(panel, width, height);
 
-        perceptron percept = new perceptron();
+        perceptron percept = new perceptron(3);
 
         primaryStage.setTitle("Line");
         primaryStage.setScene(scene1);
 
-        Line lineY = new Line();
+        //Drawing line
+        Point p1 = new Point(-1, f(-1));
+        Point p2 = new Point(1, f(1));
 
-        lineY.setEndX(width);
-        lineY.setEndY(height);
-        lineY.setStartX(0);
-        lineY.setStartY(0);
+        Line classifierLine = new Line();
 
-        panel.getChildren().add(lineY);
+        classifierLine.setStartX(p1.getX());
+        classifierLine.setStartY(p1.getY());
+        classifierLine.setEndX(p2.getX());
+        classifierLine.setEndY(p2.getY());
+
+        panel.getChildren().add(classifierLine);
+
+        // Second line
+        Point p3 = new Point(-1, percept.predictY(-1));
+        Point p4 = new Point(1, percept.predictY(1));
+
+        Line guessLine = new Line();
+
+        guessLine.setStartX(p3.px);
+        guessLine.setStartY(p4.py);
+        guessLine.setEndX(p3.px);
+        guessLine.setEndY(p4.py);
+
 
         Point[] points = new Point[100];
 
-        for (int i = 0; i < points.length; i++){
+        for (int i = 0; i < points.length; i++) {
 
-            points[i] = new Point();
+            Point pt = new Point();
+
+            points[i] = pt;
 
             Circle c = new Circle();
 
             c.setRadius(8);
 
-            double x = points[i].x;
-            double y = points[i].y;
-
-            c.setCenterY(y);
-            c.setCenterX(x);
+            c.setCenterX(pt.getX());
+            c.setCenterY(pt.getY());
 
             c.setStroke(Color.BLACK);
 
-            if (points[i].category ==1){
+            if (points[i].category == 1) {
                 c.setFill(Color.BLACK);
             } else {
                 c.setFill(Color.WHITE);
@@ -76,9 +91,11 @@ public class drawing extends Application {
 
         }
 
-        for (Point pt : points){
 
-            double[] inputs = {pt.x, pt.y};
+        //Training
+        for (Point pt : points) {
+
+            double[] inputs = {pt.x, pt.y, pt.bias};
 
             int category = pt.category;
 
@@ -94,21 +111,19 @@ public class drawing extends Application {
             double x = pt.x;
             double y = pt.y;
 
-            c.setCenterY(y);
-            c.setCenterX(x);
+            c.setCenterY(pt.py);
+            c.setCenterX(pt.px);
 
             c.setStroke(Color.TRANSPARENT);
 
-            if (predicted == category){
+            if (predicted == category) {
 
                 c.setFill(Color.GREEN);
 
             } else {
                 c.setFill(Color.RED);
             }
-
             panel.getChildren().add(c);
-
 
         }
 
@@ -116,10 +131,11 @@ public class drawing extends Application {
 
     }
 
-
-
-    public void launch(){
+    public void launch() {
         Application.launch();
     }
 
 }
+
+//TODO make a settings file with a common width and height for all classes
+//TODO make a package with utils for all cllases
