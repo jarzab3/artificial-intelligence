@@ -110,6 +110,7 @@ public class sortByClass {
             }
             if (multiArray[row][2] == 1) {
 
+
                 arrayClass1[i1][0] = multiArray[row][0];
                 arrayClass1[i1][1] = multiArray[row][1];
                 arrayClass1[i1][2] = multiArray[row][2];
