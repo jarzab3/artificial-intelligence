@@ -27,8 +27,8 @@ public class Main {
 
         LexicOrder lex = new LexicOrder();
 
-//        lex.order();
-        lex.test();
+        lex.order();
+//        lex.test();
 
 
 

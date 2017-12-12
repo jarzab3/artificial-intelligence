@@ -1,75 +1,99 @@
+import javax.xml.bind.Element;
+import java.lang.annotation.ElementType;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class LexicOrder {
 
-    public static void order(){
-        int vals[] = {0, 1, 2};
-        boolean stopWhile = true;
+    public static void order() {
+        boolean runWhile = true;
+
+        int vals[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
         System.out.println("Values at the start");
-
-        for(int p = 0; p <vals.length; p++){
-            System.out.print(vals[p] + " ");
-        }
-
         System.out.println();
 
-        int largestI = -1;
+        while (runWhile) {
+//        for (int k = 0; k < 1; k++) {
 
-        while(stopWhile){
+//            Print array to the console
+            for (int p = 0; p < vals.length; p++) {
+                System.out.print(vals[p] + " ");
+            }
+            System.out.println();
 
-            for (int i = 0; i < vals.length -1; i++){
-                if (vals[i] < vals[i+ 1]){
+//            Start math computation below
+//            Step 1
+            int largestI = -1;
+
+            for (int i = 0; i < vals.length - 1; i++) {
+                if (vals[i] < vals[i + 1]) {
                     largestI = i;
                 }
             }
 
-            if (largestI == -1){
-                stopWhile = false;
+            if (largestI == -1) {
+                runWhile = false;
                 System.out.println("Finished");
+                break;
             }
 
+//Exit while loop when runWhile becomes true
+            if (runWhile == false)
+                break;
+
+//          Step 2
             int largestJ = -1;
 
-            for (int j = 0; j < vals.length -1; j++){
-                if(vals[j] <vals[largestI]){
+            for (int j = 0; j < vals.length; j++) {
+                if (vals[largestI] < vals[j]) {
                     largestJ = j;
                 }
             }
 
             Utils.swap(vals, largestI, largestJ);
 
-            int[] newArray = Arrays.copyOfRange(vals, 0, largestI);
+//            System.out.println("largest is:"+ largestI + "length " + vals.length);
 
-            Collections.reverse(Arrays.asList(newArray));
+            int[] begArray = Arrays.copyOfRange(vals, 0, largestI +1);
 
-            Utils.appendArray(vals, newArray);
+            int[] endArray = Arrays.copyOfRange(vals, largestI + 1, vals.length );
 
+            Utils.revereseArray(endArray, 0, endArray.length - 1);
+
+            vals = Utils.appendArray(begArray, endArray);
+
+//            System.out.println("\nslicing");
+//
+//            for (int p = 0; p < begArray.length; p++) {
+//                System.out.print(begArray[p] + " ");
+//            }
+//            System.out.println("\n");
+//
+//            for (int p = 0; p < endArray.length; p++) {
+//                System.out.print(endArray[p] + " ");
+//            }
+
+
+//            System.out.println("\n");
+//            System.out.println("---\n\n");
         }
-
-
-
     }
+
     public void test() {
 
-        int[] va = {1,2,3};
+        int[] va = {1, 2, 3};
 
-        int[] v1 = {9,9,9};
-
+        int[] v1 = {9, 9, 9};
 
 
         va = Utils.appendArray(va, v1);
 
-        Utils.revereseArray(va, 0, va.length -1);
+        Utils.revereseArray(va, 0, va.length - 1);
 
-        for(int p = 0; p <va.length; p++){
+        for (int p = 0; p < va.length; p++) {
             System.out.print(va[p] + " ");
         }
 
-
     }
-
-
-
 }
-
