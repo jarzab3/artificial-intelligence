@@ -49,9 +49,9 @@ public class Main {
 
 //      Provide a file name from which you want to read data. For example "data2.txt" or "data.txt"
 
-        int[][] valuesFromFile = Utils.readToArray("data2.txt");
+        int[][] valuesFromFile = Utils.readToArray("data3.txt");
 
-        Utils.printArray1(valuesFromFile);
+//        Utils.printArray1(valuesFromFile);
 
         System.out.println();
         System.out.println();
@@ -123,10 +123,6 @@ public class Main {
 //            }
 //            scanner.close();
 
-        data = valuesFromFile;
-
-        double distance = Utils.calculateTotalDistance(data);
-        System.out.println("Initial total distance " + distance);
 
 
         int order[];
@@ -137,7 +133,17 @@ public class Main {
 //        long ll =
 //        System.out.println(bi1);
 
-        for (int i = 0; i < 999999999; i++) {
+        // Set task to run for specific time in seconds
+        int timeToRun = 30;
+
+        long endTime = System.currentTimeMillis() + timeToRun * 1000;
+
+        data = valuesFromFile;
+
+        double theBestDistance = Utils.calculateTotalDistance(data);
+        System.out.println("Initial total distance: " + theBestDistance + "\n");
+
+        while (System.currentTimeMillis() < endTime) {
 
             int city1 = rand.nextInt(data.length);
             int city2 = rand.nextInt(data.length);
@@ -146,14 +152,35 @@ public class Main {
 
             double distance1 = Utils.calculateTotalDistance(data);
 
-            if (distance1 < distance) {
-                distance = distance1;
+            if (distance1 < theBestDistance) {
+                theBestDistance = distance1;
 
-                System.out.println(distance);
+                System.out.println("Found better path with distance: " + theBestDistance);
+
             }
         }
 
-        
+        System.out.println("\nThe best found path has distance: " + theBestDistance + "\n");
+
+
+
+//        for (int i = 0; i < 9999999; i++) {
+//
+//            int city1 = rand.nextInt(data.length);
+//            int city2 = rand.nextInt(data.length);
+//
+//            Utils.swapCities(data, city1, city2);
+//
+//            double distance1 = Utils.calculateTotalDistance(data);
+//
+//            if (distance1 < distance) {
+//                distance = distance1;
+//
+//                System.out.println(distance);
+//            }
+//        }
+
+
 
     }
 }
