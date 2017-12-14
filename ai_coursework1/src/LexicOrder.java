@@ -8,13 +8,12 @@ public class LexicOrder {
     public static void order() {
         boolean runWhile = true;
 
-        int vals[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int vals[] = {0, 1, 2, 4, 5, 6, 7, 8};
 
         System.out.println("Values at the start");
         System.out.println();
 
         while (runWhile) {
-//        for (int k = 0; k < 1; k++) {
 
 //            Print array to the console
             for (int p = 0; p < vals.length; p++) {
@@ -62,21 +61,6 @@ public class LexicOrder {
             Utils.revereseArray(endArray, 0, endArray.length - 1);
 
             vals = Utils.appendArray(begArray, endArray);
-
-//            System.out.println("\nslicing");
-//
-//            for (int p = 0; p < begArray.length; p++) {
-//                System.out.print(begArray[p] + " ");
-//            }
-//            System.out.println("\n");
-//
-//            for (int p = 0; p < endArray.length; p++) {
-//                System.out.print(endArray[p] + " ");
-//            }
-
-
-//            System.out.println("\n");
-//            System.out.println("---\n\n");
         }
     }
 
