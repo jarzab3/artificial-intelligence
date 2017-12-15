@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.*;
 
 
@@ -34,6 +33,7 @@ public class Utils {
             }
             System.out.println();
         }
+        System.out.println("\n");
     }
 
     public static void printArray2(int[] arrIn) {
@@ -41,7 +41,7 @@ public class Utils {
         for (int i = 0; i < arrIn.length; i++) {
             System.out.print(arrIn[i] + " ");
         }
-        System.out.println();
+        System.out.println("\n");
     }
 
     public static double calculateTotalDistance(int[][] arrIn) {
@@ -97,16 +97,25 @@ public class Utils {
 
     }
 
-    public static void revereseArray(int arr[], int start, int end) {
-        //Method that takes an array and reverse order of this array for specified range
+//    public static void (int arr[], int start, int end) {
+//        //Method that takes an array and reverse order of this array for specified range
+//
+//        int temp;
+//        while (start < end) {
+//            temp = arr[start];
+//            arr[start] = arr[end];
+//            arr[end] = temp;
+//            start++;
+//            end--;
+//        }
+//    }
 
-        int temp;
-        while (start < end) {
-            temp = arr[start];
-            arr[start] = arr[end];
-            arr[end] = temp;
-            start++;
-            end--;
+    public static void revereseArray(int[] array) {
+
+        for (int i = 0; i < array.length / 2; i++) {
+            int temp = array[i];
+            array[i] = array[array.length - i - 1];
+            array[array.length - i - 1] = temp;
         }
     }
 
@@ -118,12 +127,14 @@ public class Utils {
         input[val2] = temp;
     }
 
-    public static int getLengthFromFile(String filePath) throws FileNotFoundException {
+    public static int getLengthFromFile(String fileName) throws FileNotFoundException {
         // This function read data from file and checks the length
+
+        String absPath = System.getProperty("user.dir") + "/src/" + fileName;
 
         int arrayLength = 0;
 
-        Scanner scanner = new Scanner(new File(filePath));
+        Scanner scanner = new Scanner(new File(absPath));
 
         while (scanner.hasNextInt()) {
             arrayLength++;
@@ -141,15 +152,11 @@ public class Utils {
 
         int arrayLength = 0;
 
-        arrayLength = getLengthFromFile(absPath);
-
-//      System.out.println(absPath);
+        arrayLength = getLengthFromFile(fileName);
 
         Scanner scanner = new Scanner(new File(absPath));
 
-        int[][] valsFromfile = new int[arrayLength / 3 ][3];
-
-//        System.out.println(arrayLength);
+        int[][] valsFromfile = new int[arrayLength / 3][3];
 
         while (scanner.hasNextInt()) {
 
@@ -177,29 +184,67 @@ public class Utils {
         System.out.println();
     }
 
+    public static void printAdjacencyMatrixDouble(double[][] matrix) {
+        System.out.println("Adjacency matrix values:");
 
-    public static int[][] createAdjacencyMatrix() {
-//        Creates Adjacency Matrix for given arrays with edges
-//        Example below
-        int[] edge_u = {0, 0, 0, 1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4};
-        int[] edge_v = {1, 3, 4, 0, 2, 3, 4, 1, 3, 0, 1, 2, 4, 0, 1, 3};
+        for (int i = 0; i < matrix.length; i++) {
+            for (int k = 0; k < matrix[0].length; k++) {
+                System.out.print(matrix[i][k] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
 
-//            Number of nodes
-        final int n = 5;
 
-        int[][] adjMatrix = new int[n][n];
+    public static double[][] makeMatrixOfCities(int[][] data, int numberOfCities) {
 
-        int m = edge_u.length;
-        for (int i = 0; i < m; i++) {
-            int u = edge_u[i];
-            int v = edge_v[i];
-            adjMatrix[u][v] = 1;
+        double[][] matrixDistances = new double[numberOfCities][numberOfCities];
+
+        for (int i = 0; i < matrixDistances.length; i++) {
+            for (int j = 0; j < matrixDistances[0].length; j++) {
+
+                double x1 = data[i][1];
+                double y1 = data[i][2];
+                double x2 = data[j][1];
+                double y2 = data[j][2];
+
+                double distance = Utils.calcDistance(x1, y1, x2, y2);
+
+                matrixDistances[i][j] = distance;
+
+            }
         }
 
-        return adjMatrix;
+        return matrixDistances;
 
     }
-//End of createAdjacency Matrix
+
+
+    public static double calculateDistanceforPath(double[][] dataIn, int[] path) {
+
+        double totalDistance = 0;
+
+        for (int i = 0; i < path.length - 1; i++) {
+            totalDistance += dataIn[path[i]][path[i + 1]];
+        }
+
+        totalDistance += dataIn[path[0]][path[path.length - 1]];
+
+        return totalDistance;
+    }
+
+    public static int[] initPath(int numberOfCities) {
+
+        int[] path = new int[numberOfCities];
+
+        for (int i = 0; i < numberOfCities; i++) {
+            path[i] = i;
+        }
+
+        return path;
+
+    }
 
 
 }
