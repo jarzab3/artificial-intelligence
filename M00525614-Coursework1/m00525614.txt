@@ -1,0 +1,29 @@
+10/10	Self Marking Sheet
+8/10	Solve First Training Problem  	                       You seem to have done a pretty solid system, but you fell
+								down on two major obvious points.  First, the path
+								needs to return to the start.  So, the first training solution
+								is 02130.  Second, you need to actually printout the best
+								path.  I really have no idea if you've got the best results,
+								but....
+		
+10/10	Get Optimal Result for All Three Training Problems.    Yes, I think you get the best results.
+9/10	Describe Algorithm(s) Used				Your description is pretty solid.  Thanks for the extra maths.
+5/10	Quality of Code						This is also a bit of a shame.  You've clearly written some
+								good code, but have also failed at some basics.  Functions	
+								should fit on one page.  So, your main fucntion at > 100 lines
+								is too long.  Break it up.  You also need a comment at the
+								beginning of each file and before each function.  You shouldn't
+								use variables like i.  Give reasonable names.  The LexicOrder
+								file is really light on useful comments. 
+10/20	Get Optimal Results for the First Three Tests	        Again, I'm not sure if you've got optimal results for final1 or
+								final2 because you haven't given me a path. Final3 takes 
+								too long.
+20	Get Optimal Results for First Three Tests in under a minute.  You haven't put a timer in so I can't give you points
+									here or below.
+10	Best system on Fourth Test (Path length times time.)
+
+52/100
+
+It's an interesting solution.  If you'd come to the lab to show me a working system, you would have gotten a few more points
+and I'd feel more confident that I didn't give you too much.  For the next course work, make sure you're solving the problem
+correctly.  Also fix up your coding style.  None the less, it looks like it's a nice, solution.
