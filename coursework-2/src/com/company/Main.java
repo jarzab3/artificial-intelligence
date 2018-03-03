@@ -14,7 +14,7 @@ public class Main {
         int[][] testingSet = util.readFile(path2);
 
 
-//        util.printArray(data1[0]);
+//        util.printArray(trainingSet[0]);
 
 //        util.printArray2(data1, false);
 //        System.out.println(trainingSet.length);
@@ -26,6 +26,7 @@ public class Main {
 //        util.calcDistance(data1[2], data2[0], 64);
 
 //        util.train(data1[6], data2);
+
         util.trainForAll(trainingSet, testingSet);
 
     }
