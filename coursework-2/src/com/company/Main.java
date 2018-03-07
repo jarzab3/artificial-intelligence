@@ -1,5 +1,7 @@
 package com.company;
 
+import java.util.Arrays;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -15,6 +17,11 @@ public class Main {
 
 
 //        util.printArray(trainingSet[0]);
+
+        System.out.println(Arrays.toString(testingSet[0]));
+        System.out.println(Arrays.toString(testingSet[1]));
+        System.out.println(Arrays.toString(testingSet[3]));
+
 
 //        util.printArray2(data1, false);
 //        System.out.println(trainingSet.length);

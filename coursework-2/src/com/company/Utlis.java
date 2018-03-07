@@ -231,7 +231,7 @@ public class Utlis {
 
 //        System.out.println("\nCorrectly recognized: " + (float) (100 - (results * 100)) + "%");
 
-        printArray2(learnedData, false);
+//        printArray2(learnedData, false);
     }
 
 

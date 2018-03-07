@@ -43,8 +43,8 @@ public class Point {
 
     public Point() {
 
-        x = ThreadLocalRandom.current().nextDouble(-1, 1);
-        y = ThreadLocalRandom.current().nextDouble(-1, 1);
+        x = ThreadLocalRandom.current().nextDouble(-1, 2);
+        y = ThreadLocalRandom.current().nextDouble(-1, 2);
 
         double lineY = drawing.f(x);
 
@@ -57,4 +57,7 @@ public class Point {
             category = -1;
         }
     }
+
+
+
 }

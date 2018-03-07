@@ -57,7 +57,11 @@ public class perceptron {
 
         //Adjust the weight accordingly to error rate
         for (int i = 0; i < weights.length; i++) {
+            double debugWeight = weights[i];
             weights[i] += error * inputs[i] * learningRate;
+            if (debugWeight != weights[i]){
+            System.out.println("Debug weights before: " + debugWeight + " and after " + weights[i]);
+            }
         }
     }
 
