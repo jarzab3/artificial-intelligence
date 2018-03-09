@@ -1,6 +1,7 @@
 package com.company;
 
 import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -26,29 +27,53 @@ public class MyUtils {
      * Read the data from the file
      *
      * @param filename
+     * @param webURL
+     * @param webPath
      * @return data
      * @throws IOException On input error.
      * @see IOException
+     *
      */
-    public static int[][] readFile(String filename) {
+    public static int[][] readFile(String filename, boolean webURL, String webPath) throws IOException {
 
 //      Initialize an empty array list where a data from file will be stored.
         ArrayList<String> strs = new ArrayList<String>();
 
-        try {
-            FileInputStream instream = new FileInputStream(filename);
-            DataInputStream datain = new DataInputStream(instream);
-            BufferedReader br = new BufferedReader(new InputStreamReader(datain));
+//      If
+        if (webURL) {
+            URL connection = new URL(webPath);
+
+            System.out.println("Successfully opened stream to: " + webPath);
+
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.openStream()));
 
             String strline = null;
-            while ((strline = br.readLine()) != null) {
+            while ((strline = in.readLine()) != null) {
                 strs.add(strline);
             }
 
-            datain.close();
-//      Catch any IO error and throw exception if any occurs.
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
+            System.out.println("Received data from url");
+
+
+        } else {
+
+            try {
+                FileInputStream instream = new FileInputStream(filename);
+                DataInputStream datain = new DataInputStream(instream);
+                BufferedReader br = new BufferedReader(new InputStreamReader(datain));
+
+                String strline = null;
+                while ((strline = br.readLine()) != null) {
+                    strs.add(strline);
+                }
+
+                datain.close();
+
+//          Catch any IO error and throw exception if any occurs.
+            } catch (Exception e) {
+                e.printStackTrace(System.out);
+            }
         }
 
         int[][] data = new int[strs.size()][65];
@@ -61,6 +86,7 @@ public class MyUtils {
                 data[i][j] = Integer.valueOf(el[j]);
             }
         }
+
 
 //      Return data retried from a file
         return data;
@@ -81,7 +107,6 @@ public class MyUtils {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -89,7 +114,7 @@ public class MyUtils {
      *
      * @param arrIn
      * @param printLength
-     * @exception IllegalArgumentException
+     * @throws IllegalArgumentException
      * @since 2018-01-12
      */
     public static void printArray2(double[][] arrIn, boolean printLength) {
