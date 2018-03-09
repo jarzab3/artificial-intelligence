@@ -1,9 +1,10 @@
 package com.company;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 
 import java.io.*;
@@ -39,7 +40,9 @@ public class MyUtils {
 //      Initialize an empty array list where a data from file will be stored.
         ArrayList<String> strs = new ArrayList<String>();
 
-//      If
+//      By default is set up to download data from web, but if this fails then switch to local data.
+
+
         if (webURL) {
             URL connection = new URL(webPath);
 
@@ -160,13 +163,45 @@ public class MyUtils {
 
 //         Stores temporary value. Adding cumulatively.
             tempResult = tempResult + Math.pow((q - p), 2);
-
         }
 
 //      Take a square root of total n dimensional points
         distance = Math.sqrt(tempResult);
 
         return distance;
+    }
+
+
+    /**
+     * The activation function for svm. Function that takes an input and returns a sign of this number
+     *
+     * @param input
+     * @return -1 or 1
+     * @since 2018-02-10
+     */
+    public static int sign(double input) {
+
+        if (input >= 0) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    /**
+     * The Dot Product gives a number as an answer (a "scalar", not a vector).
+     * The Dot Product is written using a central dot: a · b
+     * This means the Dot Product of a and b
+     * @param a
+     * @param b
+     * @return
+     */
+    public static double dotProduct(double[] a, double[] b) {
+        double sum = 0;
+        for (int i = 0; i < a.length; i++) {
+            sum += a[i] * b[i];
+        }
+        return sum;
     }
 
     /**
@@ -206,6 +241,156 @@ public class MyUtils {
 
 //      Returns cosine similarity value for n dimensional data.
         return cosineSimilarity;
+    }
+
+    /**
+     * Function that takes two arrays and multiply each of these values by themself.
+     * @implNote Example: {1,2} x {2, 3} --> {2, 6}
+     * @param array1
+     * @param array2
+     * @return an array of new values
+     * @since 2018-03-03
+     */
+    public static double[] multiplyArray(double[] array1, double[] array2) {
+
+        double[] newArray = new double[array1.length];
+
+        for (int i = 0; i < array1.length; i++) {
+            newArray[i] = array1[i] * array2[i];
+        }
+
+        return newArray;
+    }
+
+    /**
+     * Functuion calculates the magnitude of a vector from its components, we take the square
+     * root of the sum of the components' squares (this is a direct result of the Pythagorean theorem):
+     *
+     * @param vector
+     * @param round
+     * @return double magnitude
+     * @since 2018-03-02
+     */
+    public static double vectorMagnitude(double[] vector, boolean round) {
+
+        double magnitude;
+
+        magnitude = Math.sqrt(Math.pow(vector[0], 2) + Math.pow(vector[1], 2));
+
+        if (round){
+            magnitude = Math.round(magnitude);
+        }
+
+        return magnitude;
+    }
+
+    /**
+     * Function which takes an arrayList and duplicates its elements by variable 'times'
+     * @param times
+     * @param list
+     * @since 2018-02-26
+     */
+    public static void duplicateList(int times, ArrayList<Double> list) {
+
+        int listSize = list.size();
+
+        for (int i = 0; i < listSize; i++) {
+
+            for (int j = 0; j < times; j++) {
+                Double temp = list.get(i);
+                list.add(temp);
+
+            }
+        }
+    }
+
+
+    /**
+     * Function converts 2d array into dictionary. Therefore it can be easier searched
+     *
+     * @param dataDict
+     * @return Dictionary
+     * @since 2018-03-19
+     */
+    public static List<Double> dictToList(Dictionary<Integer, double[][]> dataDict) {
+
+        List<Double> all_data = new ArrayList<Double>();
+
+        Enumeration<double[][]> element = dataDict.elements();
+
+        while (element.hasMoreElements()) {
+            double[][] a = element.nextElement();
+
+            for (double[] i : a) {
+                for (double j : i) {
+                    all_data.add(j);
+                }
+            }
+        }
+
+        return all_data;
+    }
+
+
+    /**
+     * @param pixel
+     * @return grayArray an array of gray values from RGB colors
+     * @since 2018-03-09
+     */
+    public int printPixelARGB(int pixel) {
+        int alpha = (pixel >> 24) & 0xff;
+        int red = (pixel >> 16) & 0xff;
+        int green = (pixel >> 8) & 0xff;
+        int blue = (pixel) & 0xff;
+//        For debug purpose, uncomment below line
+//        System.out.println("argb: " + alpha + ", " + red + ", " + green + ", " + blue + " Grayscale: " + (red + green + blue + alpha) / 4);
+
+        return (red + green + blue + alpha) / 4;
+    }
+
+    private int[] marchThroughImage(BufferedImage image) {
+//      Dimensions of the image
+        int w = image.getWidth();
+        int h = image.getHeight();
+
+//      Temp index for an array write
+        int arrayindex = 0;
+
+//      New array for gray values
+        int[] grayArray = new int[h * w];
+
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                int pixel = image.getRGB(j, i);
+                int gray = printPixelARGB(pixel);
+                grayArray[arrayindex] = gray;
+                arrayindex++;
+            }
+        }
+        return grayArray;
+    }
+
+    /**
+     * This function executes the conversion from image format to an array of gray values
+     * @since 2018-03-09
+     */
+    public void convertImageToGrayArray() {
+
+        String imagePath = "/Users/adamj/Desktop/one.png";
+
+        try {
+
+            BufferedImage image = ImageIO.read(new File(imagePath));
+
+            int[] grayArray;
+
+            grayArray = marchThroughImage(image);
+
+            System.out.println(Arrays.toString(grayArray));
+
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
 }

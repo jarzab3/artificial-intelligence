@@ -5,19 +5,29 @@ import java.util.Arrays;
 
 public class Main {
 
+    /**
+     * Main function where all execution happening.
+     *
+     * @since 2018-01-10
+     * @author Adam Jarzebak
+     * @param args
+     * @throws IOException
+     * @deprecated url and local connection.
+     * @apiNote Please vision 'jarzebak.eu/ai/documentation' for more details
+     * @implNote entire code as well as changes can be found on github account:
+     */
     public static void main(String[] args) throws IOException {
 
-        String path1 = "/Users/adamj/Documents/programming/artificial-intelligence/coursework-2/src/com/company/cw2DataSet1.csv";
-        String path2 = "/Users/adamj/Documents/programming/artificial-intelligence/coursework-2/src/com/company/cw2DataSet2.csv";
+        String basePath = System.getProperty("user.dir");
 
-        int[][] trainingSet = MyUtils.readFile(path1, true, "http://jarzebak.eu/getDataSet1");
-        int[][] testingSet = MyUtils.readFile(path2, true, "http://jarzebak.eu/getDataSet2");
+        String path1 = basePath + "/src/com/company/cw2DataSet1.csv";
+        String path2 = basePath + "/src/com/company/cw2DataSet2.csv";
 
+        int[][] trainingSet = MyUtils.readFile(path1, false, "http://jarzebak.eu/getDataSet1");
+        int[][] testingSet = MyUtils.readFile(path2, false, "http://jarzebak.eu/getDataSet2");
+
+//      The constructor for Classification class taken an boolean input, this enables more comments which can be useful for debugging.
         Classification classification = new Classification(false);
-
-//        System.out.println(Arrays.toString(trainingSet[0]));
-//        System.out.println(Arrays.toString(testingSet[0]));
-
 
 //      First fold test
         System.out.println("\n----------->>>Start first fold test<<<-----------\n");
@@ -27,6 +37,14 @@ public class Main {
         System.out.println("\n\n----------->>>Start second fold test<<<-----------\n\n");
         classification.findMathForAllData(testingSet, trainingSet);
 
+
+//      Two single digits outside of planned data for the coursework
+        int[] d2 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 63, 63, 63, 63, 63, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 63, 63, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 63, 63, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0, 0, 7};
+        int[] d3 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 63, 63, 63, 63, 63, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 63, 63, 0, 0, 0, 0, 0, 63, 63, 0, 0, 0, 0, 0, 0, 63, 63, 0, 0, 0, 0, 0, 63, 63, 0, 0, 0, 0, 0, 0, 63, 63, 63, 63, 63, 0, 2};
+
+//        Single test on one data point
+//        System.out.println(Arrays.toString(testingSet[0]));
+//        System.out.println(classification.findMatch(d3, trainingSet, false));
 
     }
 }
