@@ -38,6 +38,5 @@ public class Main {
         System.out.println(co.cosineSimilarity(n , n1));
 
 
-
     }
 }
