@@ -22,7 +22,7 @@ import java.io.*;
 public class Utlis {
     private boolean debug;
 
-    private double[][] learnedData = {{0, 300}, {1, 300}, {2, 300}, {3, 300}, {4, 300}, {5, 300}, {6, 300}, {7, 300}, {8, 300}, {9, 300}};
+//    private double[][] learnedData = {{0, 300}, {1, 300}, {2, 300}, {3, 300}, {4, 300}, {5, 300}, {6, 300}, {7, 300}, {8, 300}, {9, 300}};
 
     public Utlis(boolean debugMode) {
         debug = debugMode;
@@ -115,9 +115,6 @@ public class Utlis {
         double distance;
         double tempResult = 0;
 
-        int digit1 = point1[dimensions];
-        int digit2 = point2[dimensions];
-
         for (int i = 0; i < dimensions; i++) {
             double q = (double) point1[i];
             double p = (double) point2[i];
@@ -128,8 +125,41 @@ public class Utlis {
 
         distance = Math.sqrt(tempResult);
 
-
         return distance;
+    }
+
+
+    /**
+     * Method to calculate cosine similarity between two documents.
+     *
+     * @param docVector1 : document vector 1 (a)
+     * @param docVector2 : document vector 2 (b)
+     * @return
+     */
+    public double cosineSimilarity(int[] docVector1, int[] docVector2, int dimensions) {
+        double dotProduct = 0.0;
+        double magnitude1 = 0.0;
+        double magnitude2 = 0.0;
+        double cosineSimilarity = 0.0;
+
+        for (int i = 0; i < dimensions; i++) //docVector1 and docVector2 must be of same length
+        {
+            dotProduct += docVector1[i] * docVector2[i];  //a.b
+            magnitude1 += Math.pow(docVector1[i], 2);  //(a^2)
+            magnitude2 += Math.pow(docVector2[i], 2); //(b^2)
+        }
+
+        magnitude1 = Math.sqrt(magnitude1);//sqrt(a^2)
+        magnitude2 = Math.sqrt(magnitude2);//sqrt(b^2)
+
+        if (magnitude1 != 0.0 | magnitude2 != 0.0) {
+            cosineSimilarity = dotProduct / (magnitude1 * magnitude2);
+
+        } else {
+            return 0.0;
+        }
+
+        return cosineSimilarity;
     }
 
     /**
@@ -139,7 +169,7 @@ public class Utlis {
      * @param trainingSet
      * @return boolean: If correctly recognized return true otherwise false
      */
-    public double[] train(int[] point, int[][] trainingSet) {
+    public boolean train(int[] point, int[][] trainingSet, boolean debug1) {
 
         double currentDistance;
 
@@ -148,38 +178,66 @@ public class Utlis {
         int indexFound = 0;
 
         double shortestDistance = calcDistance(point, trainingSet[0], 64);
+//        double shortestDistance = cosineSimilarity(point, trainingSet[0], 64);
 
         for (int i = 1; i < trainingSet.length; i++) {
             currentDistance = calcDistance(point, trainingSet[i], 64);
 
+            if(debug1) {
+                System.out.println("Current Distance is: " + currentDistance + " Digit is: " + currentDigit + " searched point: " + trainingSet[i][64]);
+            }
+
             if (currentDistance < shortestDistance) {
                 shortestDistance = currentDistance;
                 indexFound = i;
-                if (debug) {
-                    System.out.println("Found shorter distance: " + shortestDistance + " digit is value:" + trainingSet[i][64]);
-                }
             }
         }
 
         int foundDigit = trainingSet[indexFound][64];
 
-//        Printing for debugging purposes
-        if (debug) {
-            System.out.println("Digit: " + currentDigit);
+        boolean matched =  (currentDigit == foundDigit);
 
-            System.out.println("The shortest distance is: " + shortestDistance + " Digit is: " + foundDigit + "\n");
+        if (!(matched)){
+
+            System.out.println("Second iteration");
+
+            indexFound = 0;
+
+            for (int i = 1; i < trainingSet.length; i++) {
+
+                currentDistance = cosineSimilarity(point, trainingSet[i], 64);
+
+                shortestDistance = cosineSimilarity(point, trainingSet[0], 64);
+
+                for (int ii = 1; ii < trainingSet.length; ii++) {
+                    shortestDistance = cosineSimilarity(point, trainingSet[0], 64);
+
+                    if (debug1) {
+                        System.out.println("Current Distance is: " + currentDistance + " Digit is: " + currentDigit + " searched point: " + trainingSet[ii][64]);
+                    }
+
+                    if (currentDistance < shortestDistance) {
+                        shortestDistance = currentDistance;
+                        indexFound = ii;
+                    }
+                }
+            }
         }
 
-//        If found correct match return true otherwise return false
-//        if (currentDigit == foundDigit){
-//            return true;
-//        } else {
-//            return false;
-//        }
+        foundDigit = trainingSet[indexFound][64];
 
-        double[] results = {foundDigit, shortestDistance};
+        matched =  (currentDigit == foundDigit);
 
-        return results;
+
+//      Printing for debugging purposes
+        if (debug) {
+
+            System.out.println("\nSearched digit: " + currentDigit  + " found digit: " + foundDigit + ". The shortest distance is: " + shortestDistance + " Matched:" + matched + "\n");
+
+        }
+
+
+        return matched;
     }
 
 
@@ -202,36 +260,28 @@ public class Utlis {
 
         for (int i = 0; i < trainingSet.length; i++) {
 
-            double results[] = train(trainingSet[i], testingSet);
+            boolean matched = train(trainingSet[i], testingSet, false);
 
-            int digit = (int) results[0];
-
-            double distance = results[1];
-
-            if (debug) {
-                System.out.println(digit + " | " + distance);
+            if(matched){
+                correctGuess ++;
+            } else {
+                incorrectGuess ++;
             }
 
-//          Search through digit and check if has larger distance then replace
-            double storedDistance = learnedData[digit][1];
-
-            if (storedDistance > distance) {
-                learnedData[digit][1] = distance;
-            }
             bar.update(i, totalPrograss);
-
 
         }
 
         System.out.println("Process Completed!");
 
-//        double results = (double) incorrectGuess / (double) correctGuess;
-
-//        System.out.println("\nFor this training found: " + correctGuess + " correctly recognized digits and " + incorrectGuess + " incorrectly recognized digits.");
-
-//        System.out.println("\nCorrectly recognized: " + (float) (100 - (results * 100)) + "%");
+        double errorRate = (double) incorrectGuess / (double) correctGuess;
+//
+        System.out.println("\nFor this training found: " + correctGuess + " correctly recognized digits and " + incorrectGuess + " incorrectly recognized digits.");
+//
+        System.out.println("\nCorrectly recognized: " + (float) (100 - (errorRate * 10)) + "%");
 
 //        printArray2(learnedData, false);
+
     }
 
 

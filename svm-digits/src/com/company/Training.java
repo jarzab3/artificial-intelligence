@@ -35,7 +35,7 @@ public class Training {
     double maxFeatureValue;
     double minFeatureValue;
 
-    int yi = 0;
+//    int yi = 0;
 
     /**
      * {||w|| : [w, b]}
@@ -70,9 +70,9 @@ public class Training {
         for (int s = 0; s < stepSizes.length; s++) {
             double step = stepSizes[s];
 
-            this.w = new double[]{latestOptimum, latestOptimum};
+            double[] wTemp = {latestOptimum, latestOptimum};
 
-            System.out.println("---===> " + this.w[0] + "  " + this.w[1]);
+            System.out.println("---===> " + wTemp[0] + "  " + wTemp[1]);
 
             boolean optimized = false;
 
@@ -94,7 +94,7 @@ public class Training {
                         //Trans w: [ 63.2  63.2] t: [-1, -1] w_t: [-63.2 -63.2]
                         //Example above
 
-                        double[] wt = MyUtils.multiplyArray(this.w, transformation);
+                        double[] wt = MyUtils.multiplyArray(wTemp, transformation);
 
                         boolean foundOption = true;
 
@@ -107,9 +107,7 @@ public class Training {
 
                             for (double[] xi : value) {
 
-                                this.yi = i;
-
-                                if (!((this.yi * MyUtils.dotProduct(wt, xi)) + this.b >= 1)) {
+                                if (!(((double) i * MyUtils.dotProduct(wt, xi)) + this.b >= 1)) {
                                     foundOption = false;
                                 }
 
@@ -122,24 +120,31 @@ public class Training {
 
                             double[][] tempArray = {wt, {this.b}};
 
-                            optDict.put(MyUtils.vectorMagnitude(wt, false), tempArray);
+                            double optKey = MyUtils.vectorMagnitude(wt, false);
+
+//                            if (optKey < 0.5){
+//                            System.out.println("key  " + optKey);
+//                            }
+
+                            optDict.put(optKey, tempArray);
 
                         }
                     }
                 }
 
 
-                if (this.w[0] < 0) {
+                if (wTemp[0] < 0) {
                     optimized = true;
                     System.out.println("Optimized one step");
                 } else {
 
-                    for (int i = 0; i < this.w.length; i++)
-                        this.w[i] = this.w[i] - step;
+                    for (int i = 0; i < wTemp.length; i++)
+                        wTemp[i] = wTemp[i] - step;
                 }
+
             }
 
-            ArrayList<Float> norms = new ArrayList<Float>();
+            ArrayList<Double> norms = new ArrayList<Double>();
 
             Enumeration<Double> key = optDict.keys();
 
@@ -147,46 +152,45 @@ public class Training {
 
                 double keyToAdd = key.nextElement();
 
-                DecimalFormat df = new DecimalFormat("#.00000");
+//                if(keyToAdd < 0.000001){
+//                    keyToAdd = 35.32;
+//                }
 
-//                double -df.format(keyToAdd);
-//                keyToAdd = Math.round(keyToAdd*100)/100.0d;
+                norms.add(keyToAdd);
 
-                norms.add((float)keyToAdd);
             }
 
             Collections.sort(norms);
-
-
-
-
 
 //                        # ||w|| : [w,b]
 
             double[][] optChoice = optDict.get(norms.get(0));
 
+
             this.w = optChoice[0];
             this.b = optChoice[1][0];
 
-            latestOptimum = optChoice[0][0] + step * 2;
+            latestOptimum = optChoice[0][1] + step * 2;
 
 
             //            # ||w|| : [w,b]
 
 
 //            Iterate through all data
-            Enumeration<Integer> key1 = dataDict.keys();
-            while (key.hasMoreElements()) {
-                int i = key1.nextElement();
+//            Enumeration<Integer> key1 = dataDict.keys();
+//            while (key.hasMoreElements()) {
+//                int i = key1.nextElement();
+//
+//                double[][] value = dataDict.get(i);
+//
+//                for (double[] xi : value) {
+//
+//                    yi = i;
+//
+//                }
+//            }
 
-                double[][] value = dataDict.get(i);
 
-                for (double[] xi : value) {
-
-                    this.yi = i;
-
-                }
-            }
 
         }
     }

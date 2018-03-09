@@ -11,28 +11,18 @@ public class Main {
 
         Utlis util = new Utlis(false);
 
-
         int[][] trainingSet = util.readFile(path1);
         int[][] testingSet = util.readFile(path2);
 
+        int[] n  = {0, 1, 6, 15, 12, 1, 0, 0, 0, 7, 16, 6, 6, 10, 0, 0, 0, 8, 16, 2, 0, 11, 2, 0, 0, 5, 16, 3, 0, 5, 7, 0, 0, 7, 13, 3, 0, 8, 7, 0, 0, 4, 12, 0, 1, 13, 5, 0, 0, 0, 14, 9, 15, 9, 0, 0, 0, 0, 6, 14, 7, 1, 0, 0, 0};
 
-//        util.printArray(trainingSet[0]);
-
-        System.out.println(Arrays.toString(testingSet[0]));
-        System.out.println(Arrays.toString(testingSet[1]));
-        System.out.println(Arrays.toString(testingSet[3]));
+        int[] n1 = {0, 0, 7, 16, 16, 16, 2, 0, 0, 0, 14, 14, 9, 16, 2, 0, 0, 2, 16, 6, 0, 9, 7, 0, 0, 4, 16, 1, 0, 8, 8, 0, 0, 6, 16, 0, 0, 12, 8, 0, 0, 5, 16, 4, 2, 16, 5, 0, 0, 0, 15, 16, 16, 13, 0, 0, 0, 0, 8, 13, 10, 2, 0, 0, 0};
 
 
-//        util.printArray2(data1, false);
-//        System.out.println(trainingSet.length);
-//        System.out.println(testingSet.length);
+//        System.out.println(Arrays.toString(trainingSet[0]));
 
+//        System.out.println(Utlis.calcDistance(n, n1, 64));
 
-//        System.out.println(traindata[0].length);
-
-//        util.calcDistance(data1[2], data2[0], 64);
-
-//        util.train(data1[6], data2);
 
         util.trainForAll(trainingSet, testingSet);
 
