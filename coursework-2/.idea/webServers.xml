@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="8bf6b33e-e276-42a0-9108-efa5ca3e3e07" name="ubuntu_AWS" url="http://35.178.1.157">
+        <fileTransfer host="35.178.1.157" port="22" privateKey="$USER_HOME$/.ssh/adamjarzebak.pem" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
